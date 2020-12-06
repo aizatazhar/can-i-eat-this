@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:can_i_eat_this/model/Product.dart';
+import 'package:can_i_eat_this/model/product.dart';
+import 'package:can_i_eat_this/widget/floating_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,16 +16,14 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    futureProduct = fetchProduct('https://world.openfoodfacts.org/api/v0/product/062020000248.json');
-//    futureProduct = fetchProduct('h.json');
+//    futureProduct = fetchProduct('https://world.openfoodfacts.org/api/v0/product/062020000248.json');
+    futureProduct = fetchProduct('h.json');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("test"),
-      ),
+      appBar: FloatingSearchBar(),
       body: FutureBuilder<Product>(
         future: futureProduct,
         builder: (context, snapshot) {
@@ -38,6 +37,7 @@ class _HomeState extends State<Home> {
           return CircularProgressIndicator();
         },
       ),
+      backgroundColor: Colors.blueGrey,
     );
   }
 

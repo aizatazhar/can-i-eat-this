@@ -27,7 +27,7 @@ class Logic {
   }
 
   Product parseJson(Map<String, dynamic> json) {
-    if (json["status"] == 0) {
+    if (json["status"] == 0 || json["product"]["product_name"] == null) {
       return Product(
         name: "No such product in database",
         ingredients: null,
@@ -35,8 +35,15 @@ class Logic {
     }
 
     String productName = json["product"]["product_name"];
+
     List<Ingredient> productIngredients = List();
-    for (int i = 0; i < json["product"]["ingredients"].length; i++) {
+    int ingredientsLength;
+    if (json["product"]["ingredients"] == null) {
+      ingredientsLength = 0;
+    } else {
+      ingredientsLength = json["product"]["ingredients"].length;
+    }
+    for (int i = 0; i < ingredientsLength; i++) {
       Status isVegan;
       if (json["product"]["ingredients"][i]["vegan"] == "yes") {
         isVegan = Status.YES;

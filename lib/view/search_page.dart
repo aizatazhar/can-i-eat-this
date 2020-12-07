@@ -4,22 +4,26 @@ import 'package:can_i_eat_this/widget/fixed_search_bar.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
+  final Function callback;
+
+  SearchPage({this.callback});
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
+  bool _isFirstSearch = true; // prevents an empty search when first opening screen
   String _searchInput = "";
-  Logic logic = Logic();
+  Logic _logic = Logic();
 
   @override
   Widget build(BuildContext context) {
-    print(_searchInput);
     return Scaffold(
       appBar: FixedSearchBar(callback: setSearchInput),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 0),
-        child: _buildSearchResults(_searchInput)
+        child: _isFirstSearch ? Container() : _buildSearchResults(_searchInput)
       ),
       backgroundColor: Colors.blueGrey,
     );
@@ -28,43 +32,48 @@ class _SearchPageState extends State<SearchPage> {
   void setSearchInput(String searchInput) {
     setState(() {
       _searchInput = searchInput;
+      _isFirstSearch = false;
     });
   }
 
   Widget _buildSearchResults(String searchInput) {
-    Future<Product> futureProduct = logic.fetchProduct(_searchInput);
+    Future<Product> futureProduct = _logic.fetchProduct(_searchInput);
 
     return FutureBuilder<Product>(
       future: futureProduct,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView(
-            children: [
-              ListTile(
-                title: Text(snapshot.data.name),
-                leading: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.lunch_dining),
-                  ],
-                ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                tileColor: Colors.blueGrey.shade300,
-                subtitle: Wrap(children: [
-                  Text(snapshot.data.ingredients.toString())
-                ]),
-                onTap: () {
-                  print("Open product/ingredient on home page");
-                },
-              )
-            ],
-          );
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
-        }
+        switch (snapshot.connectionState) {
+          case (ConnectionState.waiting):
+            return Center(child: CircularProgressIndicator());
+          default:
+            if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
 
-        // By default, show a loading spinner.
-        return CircularProgressIndicator();
+            return ListView(
+              children: [
+                ListTile(
+                  title: Text(snapshot.data.name),
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.lunch_dining),
+                    ],
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                  tileColor: Colors.blueGrey.shade300,
+                  subtitle: Wrap(children: [
+                    Text(snapshot.data.ingredients.toString())
+                  ]),
+                  onTap: () {
+                    print("Open product/ingredient on home page");
+                    this.widget.callback(snapshot.data);
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+        }
       },
     );
   }

@@ -1,8 +1,11 @@
-import 'package:can_i_eat_this/view/search_page.dart';
 import 'package:flutter/material.dart';
 
 // Search bar shown on the home page
 class FloatingSearchBar extends StatelessWidget with PreferredSizeWidget {
+  final Widget searchPage;
+
+  FloatingSearchBar({this.searchPage});
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -40,7 +43,7 @@ class FloatingSearchBar extends StatelessWidget with PreferredSizeWidget {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SearchPage()),
+                          MaterialPageRoute(builder: (context) => searchPage),
                         );
                       },
                     ),

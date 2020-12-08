@@ -1,5 +1,4 @@
-import 'package:can_i_eat_this/view/home.dart';
-import 'package:can_i_eat_this/widget/app_theme.dart';
+import 'package:can_i_eat_this/view/root.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Flutter Demo',
-      home: Home(),
+      home: Root(),
 //      theme: AppTheme.lightThemeData,
       debugShowCheckedModeBanner: false,
     );

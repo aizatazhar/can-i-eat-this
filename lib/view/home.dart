@@ -2,7 +2,6 @@ import 'package:can_i_eat_this/controller/logic.dart';
 import 'package:can_i_eat_this/model/product.dart';
 import 'package:can_i_eat_this/view/search_page.dart';
 import 'package:can_i_eat_this/widget/floating_search_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -21,8 +20,20 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: FloatingSearchBar(searchPage: SearchPage(callback: _setProduct)),
+      floatingActionButton: FlatButton(
+        child: Wrap(
+          children: [
+            Icon(Icons.camera_alt, color: Colors.white, size: 22),
+            SizedBox(width: 10),
+            Text("Scan", style: TextStyle(color: Colors.white, fontSize: 18)),
+          ]
+        ),
+        color: Colors.redAccent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        onPressed: () => scanBarcodeNormal(),
+        height: 40,
+      ),
       body: _buildBody(),
-      backgroundColor: Colors.blueGrey,
     );
   }
 
@@ -33,11 +44,7 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
-              onPressed: () => scanBarcodeNormal(),
-              child: Text("Start barcode scan")
-            ),
-            Text("Scan result: $_scanBarcode"),
+            Text("Scanned barcode: $_scanBarcode"),
             Text(_product == null ? "Not searched yet" : _product.name)
           ]
         )

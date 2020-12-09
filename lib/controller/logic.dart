@@ -1,6 +1,4 @@
-import 'package:can_i_eat_this/model/ingredient.dart';
 import 'package:can_i_eat_this/model/product.dart';
-import 'package:can_i_eat_this/model/status.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';

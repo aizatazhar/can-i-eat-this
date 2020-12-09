@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Product _product;
-  String _scanBarcode = 'Unknown';
+  String _scanBarcode = "";
   Logic logic = Logic();
 
   @override
@@ -45,7 +45,8 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text("Scanned barcode: $_scanBarcode"),
-            Text(_product == null ? "Not searched yet" : _product.name)
+            Text(_product == null ? "Not searched yet" : _product.name),
+            Text(_product == null ? "Not searched yet" : _product.ingredients.toString()),
           ]
         )
       );

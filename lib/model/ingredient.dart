@@ -1,4 +1,4 @@
-import 'package:can_i_eat_this/model/status.dart';
+enum Status {YES, NO, MAYBE}
 
 class Ingredient {
   final String name;

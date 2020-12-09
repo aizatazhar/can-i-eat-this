@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: FixedSearchBar(callback: setSearchInput),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 0),
-        child: _isFirstSearch ? Container() : _buildSearchResults(_searchInput)
+        child: _isFirstSearch ? _buildEmptyView() : _buildSearchResults(_searchInput)
       ),
       backgroundColor: Colors.blueGrey,
     );
@@ -75,6 +75,13 @@ class _SearchPageState extends State<SearchPage> {
             );
         }
       },
+    );
+  }
+
+  Widget _buildEmptyView() {
+    return Container(
+      alignment: Alignment.center,
+      child: Text("Search for an ingredient or product!"),
     );
   }
 }

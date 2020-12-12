@@ -49,7 +49,7 @@ class _SearchPageState extends State<SearchPage> {
             if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
-            print(snapshot.data.name);
+
             return ListView(
               children: [
                 ListTile(

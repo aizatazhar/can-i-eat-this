@@ -28,16 +28,17 @@ class Product {
       ingredients.add(Ingredient.fromJson(jsonIngredients[i]));
     }
 
-    List<String> allergens = List();
-    for (String allergen in json["product"]["allergens"].split(",")) {
-      allergens.add(allergen.split(" en:")[1]);
+    List<String> rawAllergens = json["product"]["allergens"].split(",");
+    List<String> trimmedAllergens = List();
+    for (String allergen in rawAllergens) {
+      trimmedAllergens.add(allergen.substring(3));
     }
 
     return Product(
       name: json["product"]["product_name"],
       barcode: json["code"],
       ingredients: ingredients,
-      allergens: allergens,
+      allergens: trimmedAllergens,
     );
   }
 

@@ -21,7 +21,7 @@ class Logic {
       return Product.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response, then throw an exception.
-      throw Exception('Failed to load product. Servers may be down.');
+      throw Exception("Failed to load product. Servers may be down.");
     }
   }
 }

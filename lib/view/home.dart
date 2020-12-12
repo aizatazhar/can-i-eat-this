@@ -33,20 +33,58 @@ class _HomeState extends State<Home> {
         onPressed: () => scanBarcodeNormal(),
         height: 40,
       ),
-      body: _buildBody(),
+      body: _product == null ? _buildEmptyView() : _buildBody(),
+    );
+  }
+
+  Widget _buildEmptyView() {
+    return Container(
+      alignment: Alignment.center,
+      child: Text("Search for a product. Scanned barcode: $_scanBarcode"),
     );
   }
 
   Widget _buildBody() {
     return Builder(builder: (BuildContext context) {
       return Container(
-        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("Scanned barcode: $_scanBarcode"),
-            Text(_product == null ? "Not searched yet" : _product.name),
-            Text(_product == null ? "Not searched yet" : _product.ingredients.toString()),
+            Text("Barcode", style: Theme.of(context).textTheme.headline5),
+            Text("${_product.barcode}"),
+            SizedBox(height: 10),
+
+            Text("Product Summary", style: Theme.of(context).textTheme.headline5),
+            Text("Name", style: Theme.of(context).textTheme.subtitle2),
+            Text(_product.toString()),
+            Text("Ingredients", style: Theme.of(context).textTheme.subtitle2),
+            Text(_product.ingredientsToString()),
+            Text("Vegan", style: Theme.of(context).textTheme.subtitle2),
+            Text(_product.isVegan() ? "Yes" : "No"),
+            Text("Vegetarian", style: Theme.of(context).textTheme.subtitle2),
+            Text(_product.isVegetarian() ? "Yes" : "No"),
+            Text("Palm Oil", style: Theme.of(context).textTheme.subtitle2),
+            Text(_product.hasPalmOil() ? "Yes" : "No"),
+            Text("Allergens", style: Theme.of(context).textTheme.subtitle2),
+            Text(_product.allergensToString()),
+            SizedBox(height: 10),
+
+            Text("Non-vegan ingredients", style: Theme.of(context).textTheme.headline5),
+            Text("${_product.barcode}"),
+            SizedBox(height: 10),
+
+            Text("Non-vegetarian ingredients", style: Theme.of(context).textTheme.headline5),
+            Text("${_product.barcode}"),
+            SizedBox(height: 10),
+
+            Text("Palm oil ingredients", style: Theme.of(context).textTheme.headline5),
+            Text("${_product.barcode}"),
+            SizedBox(height: 10),
+
+            Text("Allergens", style: Theme.of(context).textTheme.headline5),
+            Text("${_product.barcode}"),
+            SizedBox(height: 10),
           ]
         )
       );
@@ -66,7 +104,9 @@ class _HomeState extends State<Home> {
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           "#ff6666", "Cancel", true, ScanMode.BARCODE);
-      fetchedProduct = await logic.fetchProduct(barcodeScanRes);
+      if (barcodeScanRes != "-1") {
+        fetchedProduct = await logic.fetchProduct(barcodeScanRes);
+      }
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
       fetchedProduct = null;

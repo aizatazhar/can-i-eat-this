@@ -9,10 +9,11 @@ class Logic {
   static final String productFields = "&fields=";
   static final String ingredientParameter = "%2Cingredients";
   static final String nameParameter = "%2Cproduct_name";
+  static final String allergenParameter = "%2Callergens";
 
   Future<Product> fetchProduct(String barcode) async {
     final String productUrl = productDomain + barcode + jsonFormat
-        + productFields + ingredientParameter + nameParameter;
+        + productFields + ingredientParameter + nameParameter + allergenParameter;
     final response = await http.get(productUrl);
 
     if (response.statusCode == 200) {

@@ -16,6 +16,10 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) {
     if (json["status"] == 0) {
       return null;
+    } else if (json["product"]["product_name"] == null) {
+      return null;
+    } else if (json["code"] == null) {
+      return null;
     }
 
     List<dynamic> jsonIngredients = json["product"]["ingredients"];
@@ -24,6 +28,9 @@ class Product {
     for (int i = 0; i < ingredientsLength; i++) {
       ingredients.add(Ingredient.fromJson(jsonIngredients[i]));
     }
+    if (ingredients.isEmpty) {
+      return null;
+    }
 
     List<String> rawAllergens = json["product"]["allergens"].split(",");
     List<String> trimmedAllergens = List();
@@ -31,6 +38,9 @@ class Product {
       for (String allergen in rawAllergens) {
         trimmedAllergens.add(allergen.substring(3));
       }
+    }
+    if (trimmedAllergens.isEmpty) {
+      trimmedAllergens.add("-");
     }
 
     return Product(

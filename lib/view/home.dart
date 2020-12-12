@@ -83,10 +83,10 @@ class _HomeState extends State<Home> {
               Text("Palm oil ingredients", style: Theme.of(context).textTheme.headline5),
               Text(StringUtils.formattedAsListView(_product.getPalmOilIngredients())),
               SizedBox(height: 10),
-//
-//              Text("Allergens", style: Theme.of(context).textTheme.headline5),
-//              Text(StringUtils.withoutFirstAndLastChars(_product.allergens.toString())),
-//              SizedBox(height: 10),
+
+              Text("Allergens", style: Theme.of(context).textTheme.headline5),
+              Text(StringUtils.withoutFirstAndLastChars(_product.allergens.toString())),
+              SizedBox(height: 10),
             ]
           ),
         )

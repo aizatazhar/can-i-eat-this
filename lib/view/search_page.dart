@@ -50,6 +50,10 @@ class _SearchPageState extends State<SearchPage> {
               return Text("${snapshot.error}");
             }
 
+            if (snapshot.data == null) {
+              return Container(child: Text("No products found"));
+            }
+
             return ListView(
               children: [
                 ListTile(

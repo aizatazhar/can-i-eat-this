@@ -15,6 +15,7 @@ class Logic {
     final String productUrl = productDomain + barcode + jsonFormat
         + productFields + ingredientParameter + nameParameter + allergenParameter;
     final response = await http.get(productUrl);
+    print(productUrl);
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response, then parse the JSON.

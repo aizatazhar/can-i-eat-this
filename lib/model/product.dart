@@ -15,10 +15,7 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     if (json["status"] == 0) {
-      return Product(
-        name: "No such product",
-        ingredients: null,
-      );
+      return null;
     }
 
     List<dynamic> jsonIngredients = json["product"]["ingredients"];
@@ -30,8 +27,10 @@ class Product {
 
     List<String> rawAllergens = json["product"]["allergens"].split(",");
     List<String> trimmedAllergens = List();
-    for (String allergen in rawAllergens) {
-      trimmedAllergens.add(allergen.substring(3));
+    if (rawAllergens.length != 0 && rawAllergens[0] != "") { // somehow can be empty string
+      for (String allergen in rawAllergens) {
+        trimmedAllergens.add(allergen.substring(3));
+      }
     }
 
     return Product(

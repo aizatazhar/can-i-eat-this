@@ -16,7 +16,7 @@ class FloatingSearchBar extends StatelessWidget with PreferredSizeWidget {
           left: 10,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(10),
               color: Colors.white
             ),
             child: Row(
@@ -33,20 +33,25 @@ class FloatingSearchBar extends StatelessWidget with PreferredSizeWidget {
                   ),
                 ),
                 Expanded(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 5),
-                    child: GestureDetector(
-                      child: Text(
-                        "Search",
-                        style: TextStyle(fontSize: 16),
+                  child: GestureDetector(
+                    child: Container( // No idea why if color is empty it doesn't expand
+                      height: 48, // magic number sorry :(
+                      color: Colors.transparent,
+                      padding: EdgeInsets.only(left: 5),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Search",
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => searchPage),
-                        );
-                      },
                     ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => searchPage),
+                      );
+                    },
                   ),
                 ),
                 IconButton(

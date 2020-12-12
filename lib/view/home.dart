@@ -1,5 +1,6 @@
 import 'package:can_i_eat_this/controller/logic.dart';
 import 'package:can_i_eat_this/model/product.dart';
+import 'package:can_i_eat_this/util/StringUtils.dart';
 import 'package:can_i_eat_this/view/search_page.dart';
 import 'package:can_i_eat_this/widget/floating_search_bar.dart';
 import 'package:flutter/material.dart';
@@ -47,45 +48,47 @@ class _HomeState extends State<Home> {
   Widget _buildBody() {
     return Builder(builder: (BuildContext context) {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text("Barcode", style: Theme.of(context).textTheme.headline5),
-            Text("${_product.barcode}"),
-            SizedBox(height: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text("Barcode", style: Theme.of(context).textTheme.headline5),
+              Text("${_product.barcode}"),
+              SizedBox(height: 10),
 
-            Text("Product Summary", style: Theme.of(context).textTheme.headline5),
-            Text("Name", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.toString()),
-            Text("Ingredients", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.ingredientsToString()),
-            Text("Vegan", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.isVegan() ? "Yes" : "No"),
-            Text("Vegetarian", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.isVegetarian() ? "Yes" : "No"),
-            Text("Palm Oil", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.hasPalmOil() ? "Yes" : "No"),
-            Text("Allergens", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.allergensToString()),
-            SizedBox(height: 10),
+              Text("Product Summary", style: Theme.of(context).textTheme.headline5),
+              Text("Name", style: Theme.of(context).textTheme.subtitle2),
+              Text(_product.toString()),
+              Text("Ingredients", style: Theme.of(context).textTheme.subtitle2),
+              Text(StringUtils.withoutFirstAndLastChars(_product.ingredients.toString())),
+              Text("Vegan", style: Theme.of(context).textTheme.subtitle2),
+              Text(_product.isVegan() ? "Yes" : "No"),
+              Text("Vegetarian", style: Theme.of(context).textTheme.subtitle2),
+              Text(_product.isVegetarian() ? "Yes" : "No"),
+              Text("Palm Oil", style: Theme.of(context).textTheme.subtitle2),
+              Text(_product.hasPalmOil() ? "Yes" : "No"),
+              Text("Allergens", style: Theme.of(context).textTheme.subtitle2),
+              Text(StringUtils.withoutFirstAndLastChars(_product.allergens.toString())),
+              SizedBox(height: 10),
 
-            Text("Non-vegan ingredients", style: Theme.of(context).textTheme.headline5),
-            Text("${_product.barcode}"),
-            SizedBox(height: 10),
+              Text("Non-vegan ingredients", style: Theme.of(context).textTheme.headline5),
+              Text(StringUtils.formattedAsListView(_product.getNonVeganIngredients())),
+              SizedBox(height: 10),
 
-            Text("Non-vegetarian ingredients", style: Theme.of(context).textTheme.headline5),
-            Text("${_product.barcode}"),
-            SizedBox(height: 10),
+              Text("Non-vegetarian ingredients", style: Theme.of(context).textTheme.headline5),
+              Text(StringUtils.formattedAsListView(_product.getNonVegetarianIngredients())),
+              SizedBox(height: 10),
 
-            Text("Palm oil ingredients", style: Theme.of(context).textTheme.headline5),
-            Text("${_product.barcode}"),
-            SizedBox(height: 10),
-
-            Text("Allergens", style: Theme.of(context).textTheme.headline5),
-            Text("${_product.barcode}"),
-            SizedBox(height: 10),
-          ]
+              Text("Palm oil ingredients", style: Theme.of(context).textTheme.headline5),
+              Text(StringUtils.formattedAsListView(_product.getPalmOilIngredients())),
+              SizedBox(height: 10),
+//
+//              Text("Allergens", style: Theme.of(context).textTheme.headline5),
+//              Text(StringUtils.withoutFirstAndLastChars(_product.allergens.toString())),
+//              SizedBox(height: 10),
+            ]
+          ),
         )
       );
     });

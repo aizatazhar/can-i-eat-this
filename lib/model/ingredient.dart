@@ -24,9 +24,9 @@ class Ingredient {
     }
 
     Status isVegetarian;
-    if (json["vegan"] == "yes") {
+    if (json["vegetarian"] == "yes") {
       isVegetarian = Status.YES;
-    } else if (json["vegan"] == "no") {
+    } else if (json["vegetarian"] == "no") {
       isVegetarian = Status.NO;
     } else {
       isVegetarian = null;

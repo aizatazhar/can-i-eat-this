@@ -30,7 +30,7 @@ class Product {
 
     List<String> allergens = List();
     for (String allergen in json["product"]["allergens"].split(",")) {
-      allergens.add(allergen.split("en:")[1]);
+      allergens.add(allergen.split(" en:")[1]);
     }
 
     return Product(
@@ -46,19 +46,23 @@ class Product {
     return name;
   }
 
-  String ingredientsToString() {
-    return ingredients.toString()
-        .substring(1, ingredients.toString().length - 1);
-  }
-
   bool isVegan() {
     for (Ingredient ingredient in ingredients) {
       if (ingredient.isVegan == Status.NO) {
         return false;
       }
     }
-
     return true;
+  }
+
+  List<Ingredient> getNonVeganIngredients() {
+    List<Ingredient> result = List();
+    for (Ingredient ingredient in ingredients) {
+      if (ingredient.isVegan == Status.NO || ingredient.isVegan == Status.MAYBE) {
+        result.add(ingredient);
+      }
+    }
+    return result;
   }
 
   bool isVegetarian() {
@@ -67,8 +71,17 @@ class Product {
         return false;
       }
     }
-
     return true;
+  }
+
+  List<Ingredient> getNonVegetarianIngredients() {
+    List<Ingredient> result = List();
+    for (Ingredient ingredient in ingredients) {
+      if (ingredient.isVegetarian == Status.NO || ingredient.isVegetarian == Status.MAYBE) {
+        result.add(ingredient);
+      }
+    }
+    return result;
   }
 
   bool hasPalmOil() {
@@ -77,16 +90,20 @@ class Product {
         return true;
       }
     }
-
     return false;
+  }
+
+  List<Ingredient> getPalmOilIngredients() {
+    List<Ingredient> result = List();
+    for (Ingredient ingredient in ingredients) {
+      if (ingredient.hasPalmOil == Status.YES || ingredient.hasPalmOil == Status.MAYBE) {
+        result.add(ingredient);
+      }
+    }
+    return result;
   }
 
   bool hasAllergens() {
     return allergens.isNotEmpty;
-  }
-
-  String allergensToString() {
-    return allergens.toString()
-        .substring(1, allergens.toString().length - 1);
   }
 }

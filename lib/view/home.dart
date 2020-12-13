@@ -13,9 +13,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Product _product;
-  String _scanBarcode = "";
-  Logic logic = Logic();
+  bool _buildUsingCache = false;
+  Product _cachedProduct;
+  String _scannedBarcode = "";
+  Logic _logic = Logic();
 
   @override
   Widget build(BuildContext context) {
@@ -31,86 +32,24 @@ class _HomeState extends State<Home> {
         ),
         color: Colors.redAccent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        onPressed: () => scanBarcodeNormal(),
+        onPressed: () => scanBarcode(),
         height: 40,
       ),
-      body: _product == null ? _buildEmptyView() : _buildBody(),
+      body: _buildUsingCache ? _buildCachedProduct() : _buildScannedProduct(),
     );
   }
 
-  Widget _buildEmptyView() {
-    return Container(
-      alignment: Alignment.center,
-      child: Text("Search for a product. Scanned barcode: $_scanBarcode"),
-    );
-  }
-
-  Widget _buildBody() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text("Barcode", style: Theme.of(context).textTheme.headline5),
-            Text("${_product.barcode}"),
-            SizedBox(height: 10),
-
-            Text("Product Summary", style: Theme.of(context).textTheme.headline5),
-            Text("Name", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.toString()),
-            Text("Ingredients", style: Theme.of(context).textTheme.subtitle2),
-            Text(StringUtils.withoutFirstAndLastChars(_product.ingredients.toString())),
-            Text("Vegan", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.isVegan() ? "Yes" : "No"),
-            Text("Vegetarian", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.isVegetarian() ? "Yes" : "No"),
-            Text("Palm Oil", style: Theme.of(context).textTheme.subtitle2),
-            Text(_product.hasPalmOil() ? "Yes" : "No"),
-            Text("Allergens", style: Theme.of(context).textTheme.subtitle2),
-            Text(StringUtils.withoutFirstAndLastChars(_product.allergens.toString())),
-            SizedBox(height: 10),
-
-            Text("Non-vegan ingredients", style: Theme.of(context).textTheme.headline5),
-            Text(StringUtils.formattedAsListView(_product.getNonVeganIngredients())),
-            SizedBox(height: 10),
-
-            Text("Non-vegetarian ingredients", style: Theme.of(context).textTheme.headline5),
-            Text(StringUtils.formattedAsListView(_product.getNonVegetarianIngredients())),
-            SizedBox(height: 10),
-
-            Text("Palm oil ingredients", style: Theme.of(context).textTheme.headline5),
-            Text(StringUtils.formattedAsListView(_product.getPalmOilIngredients())),
-            SizedBox(height: 10),
-
-            Text("Allergens", style: Theme.of(context).textTheme.headline5),
-            Text(StringUtils.withoutFirstAndLastChars(_product.allergens.toString())),
-            SizedBox(height: 10),
-          ]
-        ),
-      )
-    );
-  }
-  
-  void _setProduct(Product product) {
-    setState(() {
-      _product = product;
-    });
-  }
-
-  Future<void> scanBarcodeNormal() async {
+  Future<void> scanBarcode() async {
     String barcodeScanRes;
-    Product fetchedProduct;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           "#ff6666", "Cancel", true, ScanMode.BARCODE);
-      if (barcodeScanRes != "-1") {
-        fetchedProduct = await logic.fetchProduct(barcodeScanRes);
+      if (barcodeScanRes == "-1") { // Don't update any state if we cancel the scan
+        return;
       }
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
-      fetchedProduct = null;
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -119,8 +58,141 @@ class _HomeState extends State<Home> {
     if (!mounted) return;
 
     setState(() {
-      _scanBarcode = barcodeScanRes;
-      _product = fetchedProduct;
+      _buildUsingCache = false;
+      _scannedBarcode = barcodeScanRes;
     });
+  }
+
+  void _setProduct(Product product) {
+    setState(() {
+      _cachedProduct = product;
+      _buildUsingCache = true;
+    });
+  }
+
+  // Builds the body using the product cached from a manual search
+  Widget _buildCachedProduct() {
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text("Barcode", style: Theme.of(context).textTheme.headline5),
+              Text(_cachedProduct.barcode),
+              SizedBox(height: 10),
+
+              Text("Product Summary", style: Theme.of(context).textTheme.headline5),
+              Text("Name", style: Theme.of(context).textTheme.subtitle2),
+              Text(_cachedProduct.toString()),
+              Text("Ingredients", style: Theme.of(context).textTheme.subtitle2),
+              Text(StringUtils.withoutFirstAndLastChars(_cachedProduct.ingredients.toString())),
+              Text("Vegan", style: Theme.of(context).textTheme.subtitle2),
+              Text(_cachedProduct.isVegan() ? "Yes" : "No"),
+              Text("Vegetarian", style: Theme.of(context).textTheme.subtitle2),
+              Text(_cachedProduct.isVegetarian() ? "Yes" : "No"),
+              Text("Palm Oil", style: Theme.of(context).textTheme.subtitle2),
+              Text(_cachedProduct.hasPalmOil() ? "Yes" : "No"),
+              Text("Allergens", style: Theme.of(context).textTheme.subtitle2),
+              Text(StringUtils.withoutFirstAndLastChars(_cachedProduct.allergens.toString())),
+              SizedBox(height: 10),
+
+              Text("Non-vegan ingredients", style: Theme.of(context).textTheme.headline5),
+              Text(StringUtils.formattedAsListView(_cachedProduct.getNonVeganIngredients())),
+              SizedBox(height: 10),
+
+              Text("Non-vegetarian ingredients", style: Theme.of(context).textTheme.headline5),
+              Text(StringUtils.formattedAsListView(_cachedProduct.getNonVegetarianIngredients())),
+              SizedBox(height: 10),
+
+              Text("Palm oil ingredients", style: Theme.of(context).textTheme.headline5),
+              Text(StringUtils.formattedAsListView(_cachedProduct.getPalmOilIngredients())),
+              SizedBox(height: 10),
+
+              Text("Allergens", style: Theme.of(context).textTheme.headline5),
+              Text(StringUtils.withoutFirstAndLastChars(_cachedProduct.allergens.toString())),
+              SizedBox(height: 10),
+            ]
+          ),
+        )
+    );
+  }
+
+  // Builds the body using the scanned barcode
+  Widget _buildScannedProduct() {
+    if (_scannedBarcode == "") {
+      return _buildEmptyView();
+    }
+
+    Future<Product> futureProduct = _logic.fetchProduct(_scannedBarcode);
+
+    return FutureBuilder<Product>(
+      future: futureProduct,
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case (ConnectionState.waiting):
+            return Center(child: CircularProgressIndicator());
+          default:
+            if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            } else if (snapshot.data == null) {
+              return _buildEmptyView();
+            }
+
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Barcode", style: Theme.of(context).textTheme.headline5),
+                    Text(snapshot.data.barcode),
+                    SizedBox(height: 10),
+
+                    Text("Product Summary", style: Theme.of(context).textTheme.headline5),
+                    Text("Name", style: Theme.of(context).textTheme.subtitle2),
+                    Text(snapshot.data.toString()),
+                    Text("Ingredients", style: Theme.of(context).textTheme.subtitle2),
+                    Text(StringUtils.withoutFirstAndLastChars(snapshot.data.ingredients.toString())),
+                    Text("Vegan", style: Theme.of(context).textTheme.subtitle2),
+                    Text(snapshot.data.isVegan() ? "Yes" : "No"),
+                    Text("Vegetarian", style: Theme.of(context).textTheme.subtitle2),
+                    Text(snapshot.data.isVegetarian() ? "Yes" : "No"),
+                    Text("Palm Oil", style: Theme.of(context).textTheme.subtitle2),
+                    Text(snapshot.data.hasPalmOil() ? "Yes" : "No"),
+                    Text("Allergens", style: Theme.of(context).textTheme.subtitle2),
+                    Text(StringUtils.withoutFirstAndLastChars(snapshot.data.allergens.toString())),
+                    SizedBox(height: 10),
+
+                    Text("Non-vegan ingredients", style: Theme.of(context).textTheme.headline5),
+                    Text(StringUtils.formattedAsListView(snapshot.data.getNonVeganIngredients())),
+                    SizedBox(height: 10),
+
+                    Text("Non-vegetarian ingredients", style: Theme.of(context).textTheme.headline5),
+                    Text(StringUtils.formattedAsListView(snapshot.data.getNonVegetarianIngredients())),
+                    SizedBox(height: 10),
+
+                    Text("Palm oil ingredients", style: Theme.of(context).textTheme.headline5),
+                    Text(StringUtils.formattedAsListView(snapshot.data.getPalmOilIngredients())),
+                    SizedBox(height: 10),
+
+                    Text("Allergens", style: Theme.of(context).textTheme.headline5),
+                    Text(StringUtils.withoutFirstAndLastChars(snapshot.data.allergens.toString())),
+                    SizedBox(height: 10),
+                  ]
+                ),
+            )
+          );
+        }
+      },
+    );
+  }
+
+  // Builds the body when the product does not exist
+  Widget _buildEmptyView() {
+    return Container(
+      alignment: Alignment.center,
+      child: Text("Product not found. Scanned barcode: $_scannedBarcode"),
+    );
   }
 }

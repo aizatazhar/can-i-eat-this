@@ -70,7 +70,6 @@ class _SearchPageState extends State<SearchPage> {
                     Text(snapshot.data.ingredients.toString())
                   ]),
                   onTap: () {
-                    print("Open product/ingredient on home page");
                     this.widget.callback(snapshot.data);
                     Navigator.pop(context);
                   },

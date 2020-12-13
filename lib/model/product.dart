@@ -96,7 +96,7 @@ class Product {
 
   bool hasPalmOil() {
     for (Ingredient ingredient in ingredients) {
-      if (ingredient.hasPalmOil == Status.NO) {
+      if (ingredient.hasPalmOil == Status.YES || ingredient.hasPalmOil == Status.MAYBE) {
         return true;
       }
     }

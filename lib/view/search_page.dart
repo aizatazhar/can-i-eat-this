@@ -21,11 +21,11 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: FixedSearchBar(callback: setSearchInput),
+
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 0),
         child: _isFirstSearch ? _buildEmptyView() : _buildSearchResults(_searchInput)
       ),
-      backgroundColor: Colors.blueGrey,
     );
   }
 
@@ -51,11 +51,15 @@ class _SearchPageState extends State<SearchPage> {
             }
 
             if (snapshot.data == null) {
-              return Container(child: Text("No products found"));
+              return Container(child: _buildEmptyView());
             }
 
             return ListView(
               children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text("Products", style: TextStyle(fontSize: 16),)
+                ),
                 ListTile(
                   title: Text(snapshot.data.name),
                   leading: Column(
@@ -65,7 +69,6 @@ class _SearchPageState extends State<SearchPage> {
                     ],
                   ),
                   contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                  tileColor: Colors.blueGrey.shade300,
                   subtitle: Wrap(children: [
                     Text(snapshot.data.ingredients.toString())
                   ]),
@@ -84,17 +87,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget _buildEmptyView() {
     return Container(
       alignment: Alignment.center,
-      child: Text("Search for an ingredient or product!"),
+      child: Text("No such product found"),
     );
   }
 }
-
-//ExpansionTile(
-//title: Text("Products"),
-//initiallyExpanded: true,
-////          trailing: Icon(null),
-//children: [
-//Text("hello"),
-//Text("hello2")
-//],
-//),

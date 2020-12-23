@@ -73,48 +73,49 @@ class _HomeState extends State<Home> {
   // Builds the body using the product cached from a manual search
   Widget _buildCachedProduct() {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("Barcode", style: Theme.of(context).textTheme.headline5),
-              Text(_cachedProduct.barcode),
-              SizedBox(height: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height:10),
+            Text("Barcode", style: Theme.of(context).textTheme.headline5),
+            Text(_cachedProduct.barcode),
+            SizedBox(height: 10),
 
-              Text("Product Summary", style: Theme.of(context).textTheme.headline5),
-              Text("Name", style: Theme.of(context).textTheme.subtitle2),
-              Text(_cachedProduct.toString()),
-              Text("Ingredients", style: Theme.of(context).textTheme.subtitle2),
-              Text(StringUtils.withoutFirstAndLastChars(_cachedProduct.ingredients.toString())),
-              Text("Vegan", style: Theme.of(context).textTheme.subtitle2),
-              Text(_cachedProduct.isVegan() ? "Yes" : "No"),
-              Text("Vegetarian", style: Theme.of(context).textTheme.subtitle2),
-              Text(_cachedProduct.isVegetarian() ? "Yes" : "No"),
-              Text("Palm Oil", style: Theme.of(context).textTheme.subtitle2),
-              Text(_cachedProduct.hasPalmOil() ? "Yes" : "No"),
-              Text("Allergens", style: Theme.of(context).textTheme.subtitle2),
-              Text(StringUtils.withoutFirstAndLastChars(_cachedProduct.allergens.toString())),
-              SizedBox(height: 10),
+            Text("Product Summary", style: Theme.of(context).textTheme.headline5),
+            Text("Name", style: Theme.of(context).textTheme.subtitle2),
+            Text(_cachedProduct.toString()),
+            Text("Ingredients", style: Theme.of(context).textTheme.subtitle2),
+            Text(StringUtils.withoutFirstAndLastChars(_cachedProduct.ingredients.toString())),
+            Text("Vegan", style: Theme.of(context).textTheme.subtitle2),
+            Text(_cachedProduct.isVegan() ? "Yes" : "No"),
+            Text("Vegetarian", style: Theme.of(context).textTheme.subtitle2),
+            Text(_cachedProduct.isVegetarian() ? "Yes" : "No"),
+            Text("Palm Oil", style: Theme.of(context).textTheme.subtitle2),
+            Text(_cachedProduct.hasPalmOil() ? "Yes" : "No"),
+            Text("Allergens", style: Theme.of(context).textTheme.subtitle2),
+            Text(StringUtils.withoutFirstAndLastChars(_cachedProduct.allergens.toString())),
+            SizedBox(height: 10),
 
-              Text("Non-vegan ingredients", style: Theme.of(context).textTheme.headline5),
-              Text(StringUtils.formattedAsListView(_cachedProduct.getNonVeganIngredients())),
-              SizedBox(height: 10),
+            Text("Non-vegan ingredients", style: Theme.of(context).textTheme.headline5),
+            Text(StringUtils.formattedAsListView(_cachedProduct.getNonVeganIngredients())),
+            SizedBox(height: 10),
 
-              Text("Non-vegetarian ingredients", style: Theme.of(context).textTheme.headline5),
-              Text(StringUtils.formattedAsListView(_cachedProduct.getNonVegetarianIngredients())),
-              SizedBox(height: 10),
+            Text("Non-vegetarian ingredients", style: Theme.of(context).textTheme.headline5),
+            Text(StringUtils.formattedAsListView(_cachedProduct.getNonVegetarianIngredients())),
+            SizedBox(height: 10),
 
-              Text("Palm oil ingredients", style: Theme.of(context).textTheme.headline5),
-              Text(StringUtils.formattedAsListView(_cachedProduct.getPalmOilIngredients())),
-              SizedBox(height: 10),
+            Text("Palm oil ingredients", style: Theme.of(context).textTheme.headline5),
+            Text(StringUtils.formattedAsListView(_cachedProduct.getPalmOilIngredients())),
+            SizedBox(height: 10),
 
-              Text("Allergens", style: Theme.of(context).textTheme.headline5),
-              Text(StringUtils.withoutFirstAndLastChars(_cachedProduct.allergens.toString())),
-              SizedBox(height: 10),
-            ]
-          ),
-        )
+            Text("Allergens", style: Theme.of(context).textTheme.headline5),
+            Text(StringUtils.withoutFirstAndLastChars(_cachedProduct.allergens.toString())),
+            SizedBox(height: 50),
+          ]
+        ),
+      )
     );
   }
 

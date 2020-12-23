@@ -30,13 +30,14 @@ class _FixedSearchBarState extends State<FixedSearchBar> {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.black),
       elevation: 0,
       title: TextField(
         textAlignVertical: TextAlignVertical.center,
         textInputAction: TextInputAction.search,
         autofocus: true,
         controller: _controller,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.black),
         decoration: InputDecoration(
           hintText: "Search",
           border: InputBorder.none,
@@ -45,7 +46,7 @@ class _FixedSearchBarState extends State<FixedSearchBar> {
               ? IconButton(
                 icon: Icon(Icons.clear),
                 onPressed: () => _controller.clear(),
-                color: Colors.white
+                color: Colors.black
               )
               : Icon(null)
         ),

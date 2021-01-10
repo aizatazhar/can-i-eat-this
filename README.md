@@ -8,3 +8,4 @@ vegan/vegetarian or contains allergens/palm oil
 ## Acknowledgements
 * [http](https://github.com/dart-lang/http)
 * [flutter barcode scanner](https://github.com/AmolGangadhare/flutter_barcode_scanner)
+* [OpenFoodFacts](https://github.com/openfoodfacts)

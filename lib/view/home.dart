@@ -191,9 +191,23 @@ class _HomeState extends State<Home> {
 
   // Builds the body when the product does not exist
   Widget _buildEmptyView() {
-    return Container(
-      alignment: Alignment.center,
-      child: Text("Product not found. Scanned barcode: $_scannedBarcode"),
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.center,
+          child: Text("Product with barcode $_scannedBarcode not found."),
+        ),
+        FlatButton(
+          child: Wrap(
+            children: [
+              Icon(Icons.camera_alt, color: Colors.white, size: 22),
+              SizedBox(width: 10),
+              Text("Add product to database", style: TextStyle(color: Colors.white, fontSize: 18)),
+            ]
+          ),
+          onPressed: () => {},
+        ),
+      ]
     );
   }
 }
